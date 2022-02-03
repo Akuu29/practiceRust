@@ -37,9 +37,16 @@ impl Deck {
 
         Deck {deck: new_deck}
     }
+
+    fn print_deck(&self) -> () {
+        println!("Displaying cards...");
+        for card in self.deck.iter() {
+            println!("{}", card.get_cards_string());
+        }
+    }
 }
 
 fn main() {
     let deck = Deck::generate_deck();
-    println!("{:?}", deck.deck);
+    deck.print_deck();
 }
