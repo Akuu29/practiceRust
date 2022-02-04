@@ -1,4 +1,8 @@
-#[derive(Debug)]
+// #[derive(Debug)]
+
+extern crate rand;
+
+use rand::Rng;
 
 struct Card {
     suit: String,
@@ -44,9 +48,21 @@ impl Deck {
             println!("{}", card.get_cards_string());
         }
     }
+
+    fn shuffle_deck(&self) -> () {
+        let deck_size = self.deck.len();
+        for card in self.deck.iter() {
+            let rand_i = rand::thread_rng().gen_range(1..=deck_size);
+            let temp = self.deck[rand_i];
+            self.deck[rand_i] = card;
+            card = &temp;
+        }
+    }
 }
 
 fn main() {
     let deck = Deck::generate_deck();
+    deck.print_deck();
+    deck.shuffle_deck();
     deck.print_deck();
 }
