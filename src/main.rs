@@ -66,9 +66,41 @@ impl Deck {
     }
 }
 
-fn main() {
+fn start_game(amount_of_players: u32) -> Vec<Vec<Card>> {
+    struct Table {
+        players: Vec<Vec<Card>>,
+        // deck: Deck
+    }
+
+    let mut table = Table {
+        players: vec![],
+        // deck: Deck::generate_deck()
+    };
+
     let mut deck = Deck::generate_deck();
     deck.shuffle_deck();
-    deck.print_deck();
-    println!("{:?}", deck.draw().get_cards_string());
+
+    let mut i = 0;
+    while i < amount_of_players {
+        let mut player_card = vec![];
+
+        let mut j = 0;
+        while j < 2 { // 手札2枚
+            player_card.push(deck.draw());
+            j += 1;
+        }
+        table.players.push(player_card);
+        i += 1;
+    }
+
+    table.players
+}
+
+fn main() {
+    let table = start_game(4);
+    println!("{:?}", table);
+    // let mut deck = Deck::generate_deck();
+    // deck.shuffle_deck();
+    // deck.print_deck();
+    // println!("{:?}", deck.draw().get_cards_string());
 }
