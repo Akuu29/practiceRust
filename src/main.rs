@@ -1,9 +1,8 @@
-// #[derive(Debug)]
-
 extern crate rand;
 
 use rand::Rng;
 
+#[derive(Clone)]
 struct Card {
     suit: String,
     value: String,
@@ -49,19 +48,21 @@ impl Deck {
         }
     }
 
-    fn shuffle_deck(&self) -> () {
-        let deck_size = self.deck.len();
-        for card in self.deck.iter() {
-            let rand_i = rand::thread_rng().gen_range(1..=deck_size);
-            let temp = self.deck[rand_i];
-            self.deck[rand_i] = card;
-            card = &temp;
+    fn shuffle_deck(&mut self) -> () {
+        let deck_size = self.deck.len() - 1;
+        let mut i = 0;
+        while i < deck_size {
+            let rand_i = rand::thread_rng().gen_range(0..=deck_size);
+            let copied_card = self.deck[rand_i].clone();
+            self.deck[rand_i] = self.deck[i].clone();
+            self.deck[i] = copied_card;
+            i += 1;
         }
     }
 }
 
 fn main() {
-    let deck = Deck::generate_deck();
+    let mut deck = Deck::generate_deck();
     deck.print_deck();
     deck.shuffle_deck();
     deck.print_deck();
