@@ -2,7 +2,7 @@ extern crate rand;
 
 use rand::Rng;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 struct Card {
     suit: String,
     value: String,
@@ -41,6 +41,11 @@ impl Deck {
         Deck {deck: new_deck}
     }
 
+    fn draw(&mut self) -> Card {
+        let card = self.deck.pop(); // optionで返却される
+        card.unwrap()
+    }
+
     fn print_deck(&self) -> () {
         println!("Displaying cards...");
         for card in self.deck.iter() {
@@ -63,7 +68,7 @@ impl Deck {
 
 fn main() {
     let mut deck = Deck::generate_deck();
-    deck.print_deck();
     deck.shuffle_deck();
     deck.print_deck();
+    println!("{:?}", deck.draw().get_cards_string());
 }
