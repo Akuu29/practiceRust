@@ -66,13 +66,15 @@ impl Deck {
     }
 }
 
-struct Table {
-    players: Vec<Vec<Card>>,
-    deck: Deck
-}
+struct Dealer {}
 
-impl Table {
-    fn start_game(amount_of_players: u32) -> Vec<Vec<Card>> {
+impl Dealer {
+    fn start_game(amount_of_players: u32, game_mode: &str) -> Vec<Vec<Card>> {
+        struct Table {
+            players: Vec<Vec<Card>>,
+            deck: Deck
+        }
+
         let mut table = Table {
             players: vec![],
             deck: Deck::generate_deck()
@@ -85,7 +87,7 @@ impl Table {
             let mut player_card = vec![];
 
             let mut j = 0;
-            while j < 2 { // 手札2枚
+            while j < Dealer::initial_cards(game_mode) { // 手札2枚
                 player_card.push(table.deck.draw());
                 j += 1;
             }
@@ -95,14 +97,17 @@ impl Table {
 
         table.players
     }
+
+    fn initial_cards(game_mode: &str) -> i32 {
+        match game_mode {
+            "poker" => 5,
+            "21" => 2,
+            _ => 0
+        }
+    }
 }
 
 fn main() {
-    let table = Table::start_game(4);
-    println!("{:?}", table);
-
-    // let mut deck = Deck::generate_deck();
-    // deck.shuffle_deck();
-    // deck.print_deck();
-    // println!("{:?}", deck.draw().get_cards_string());
+    let dealer = Dealer::start_game(4, "poker");
+    println!("{:?}", dealer);
 }
