@@ -66,17 +66,17 @@ impl Deck {
     }
 }
 
-struct Dealer {}
+struct Table {
+    players: Vec<Vec<Card>>,
+    game_mode: String,
+    deck: Deck
+}
 
-impl Dealer {
-    fn start_game(amount_of_players: u32, game_mode: &str) -> Vec<Vec<Card>> {
-        struct Table {
-            players: Vec<Vec<Card>>,
-            deck: Deck
-        }
-
+impl Table {
+    fn start_game(amount_of_players: u32, game_mode: &str) -> Table {
         let mut table = Table {
             players: vec![],
+            game_mode: game_mode.to_string(),
             deck: Deck::generate_deck()
         };
 
@@ -87,7 +87,7 @@ impl Dealer {
             let mut player_card = vec![];
 
             let mut j = 0;
-            while j < Dealer::initial_cards(game_mode) { // 手札2枚
+            while j < Dealer::initial_cards(&table.game_mode) { // 手札2枚
                 player_card.push(table.deck.draw());
                 j += 1;
             }
@@ -95,19 +95,39 @@ impl Dealer {
             i += 1;
         }
 
-        table.players
+        table
+    }
+}
+
+struct Dealer {}
+
+impl Dealer {
+    fn initial_cards(game_mode: &String) -> i32 {
+        let poker = String::from("poker");
+        let twenty_one = String::from("21");
+        match game_mode {
+            _poker => 5,
+            _twenty_one => 2,
+            _ => 0
+        }
     }
 
-    fn initial_cards(game_mode: &str) -> i32 {
-        match game_mode {
-            "poker" => 5,
-            "21" => 2,
-            _ => 0
+    fn print_table_information(table: &Table) -> () {
+        let player_len = table.players.len();
+        println!("Amount of players: {}...Game mode: {}. At this table:", player_len, table.game_mode);
+
+        let mut player = 0;
+        while player < player_len {
+            println!("Player {} hand is: ", player + 1);
+            for card in &table.players[player] {
+                println!("{}", card.get_cards_string());
+            }
+            player += 1;
         }
     }
 }
 
 fn main() {
-    let dealer = Dealer::start_game(4, "poker");
-    println!("{:?}", dealer);
+    let table = Table::start_game(4, "poker");
+    Dealer::print_table_information(&table);
 }
