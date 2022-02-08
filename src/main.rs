@@ -125,9 +125,34 @@ impl Dealer {
             player += 1;
         }
     }
+
+    fn score_21_individual(cards: [&Card; 2]) -> u32 {
+        let mut value = 0;
+        let cards_len = cards.len();
+        let mut count = 0;
+        while count < cards_len {
+            value += cards[count].int_value;
+            count += 1;
+        }
+        if value > 21 {
+            value = 0;
+        }
+        value
+    }
 }
 
 fn main() {
-    let table = Table::start_game(4, "poker");
-    Dealer::print_table_information(&table);
+    let card1 = Card {
+        suit: String::from("♦︎"),
+        value: String::from("A"),
+        int_value: 1
+    };
+    let card2 = Card {
+        suit: String::from("♦︎"),
+        value: String::from("J"),
+        int_value: 11
+    };
+
+    let cards: [&Card; 2] = [&card1, &card2];
+    println!("{}", Dealer::score_21_individual(cards));
 }
