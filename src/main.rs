@@ -141,18 +141,27 @@ impl Dealer {
     }
 }
 
-fn main() {
-    let card1 = Card {
-        suit: String::from("♦︎"),
-        value: String::from("A"),
-        int_value: 1
-    };
-    let card2 = Card {
-        suit: String::from("♦︎"),
-        value: String::from("J"),
-        int_value: 11
-    };
+struct HelperFunction {}
 
-    let cards: [&Card; 2] = [&card1, &card2];
-    println!("{}", Dealer::score_21_individual(cards));
+impl HelperFunction {
+    fn max_in_array_index (int_arr: &[u32]) -> u32 {
+        let mut maxIndex = 0;
+        let mut maxValue = int_arr[0];
+
+        let mut i = 0;
+        for int in int_arr.iter() {
+            i += 1;
+            if int > &maxValue {
+                maxValue = int.clone();
+                maxIndex = i;
+            }
+        }
+        maxValue
+    }
+}
+
+fn main() {
+    let arr1 = [12, 13, 17];
+    
+    println!("{}", HelperFunction::max_in_array_index(&arr1));
 }
