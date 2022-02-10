@@ -139,6 +139,34 @@ impl Dealer {
         }
         value
     }
+
+    fn winner_of_21(table: Table) -> String {
+        let mut points = vec![];
+        let mut cache = vec![];
+
+        for card in table.players.iter() {
+            let point = Dealer::score_21_individual(card);
+            points.push(point);
+
+            if cache[point] >= 1 {
+                cache[point] += 1;
+            }else {
+                cache[point] = 1;
+            }
+        }
+
+        pirntln!(points);
+
+        let winner_index = HelperFunction::max_in_array_index(points);
+        if cache[points[winner_index]] > 1 {
+            String::From("It is a draw")
+        } else if cache[points[winner_index]] >= 0 {
+            let winner_player = winner_index + 1;
+            String::From("player ") + winner_player.to_string() + String::From(" is the winner")
+        }else {
+            String::From("No winners..")
+        }
+    }
 }
 
 struct HelperFunction {}
@@ -161,7 +189,8 @@ impl HelperFunction {
 }
 
 fn main() {
-    let arr1 = [12, 13, 17];
-    
-    println!("{}", HelperFunction::max_in_array_index(&arr1));
+    let table = Table::start_game(4, "21");
+
+    Dealer::print_table_information(table);
+    println!("{}", Dealer::winner_of_21(table));
 }
