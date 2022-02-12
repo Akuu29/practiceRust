@@ -27,6 +27,7 @@ impl Deck {
 
         let mut int_value = 1;
         for suit in suits.iter() {
+            int_value = 1;
             for value in values.iter() {
                 let card = Card {
                     suit: suit.to_string(),
@@ -56,6 +57,7 @@ impl Deck {
     fn shuffle_deck(&mut self) -> () {
         let deck_size = self.deck.len() - 1;
         let mut i = 0;
+        // for イテレーターの変更はできない
         while i < deck_size {
             let rand_i = rand::thread_rng().gen_range(0..=deck_size);
             let copied_card = self.deck[rand_i].clone();
@@ -87,7 +89,7 @@ impl Table {
             let mut player_card = vec![];
 
             let mut j = 0;
-            while j < Dealer::initial_cards(&table.game_mode) { // 手札2枚
+            while j < Dealer::initial_cards(&table.game_mode) {
                 player_card.push(table.deck.draw());
                 j += 1;
             }
@@ -107,7 +109,7 @@ impl Dealer {
         let twenty_one = String::from("21");
         match game_mode {
             _poker => 5,
-            _twenty_one => 2,
+            _21 => 2,
             _ => 0
         }
     }
@@ -126,7 +128,7 @@ impl Dealer {
         }
     }
 
-    fn score_21_individual(cards: [&Card; 2]) -> u32 {
+    fn score_21_individual(cards: &Vec<Card>) -> u32 {
         let mut value = 0;
         let cards_len = cards.len();
         let mut count = 0;
@@ -138,34 +140,6 @@ impl Dealer {
             value = 0;
         }
         value
-    }
-
-    fn winner_of_21(table: Table) -> String {
-        let mut points = vec![];
-        let mut cache = vec![];
-
-        for card in table.players.iter() {
-            let point = Dealer::score_21_individual(card);
-            points.push(point);
-
-            if cache[point] >= 1 {
-                cache[point] += 1;
-            }else {
-                cache[point] = 1;
-            }
-        }
-
-        pirntln!(points);
-
-        let winner_index = HelperFunction::max_in_array_index(points);
-        if cache[points[winner_index]] > 1 {
-            String::From("It is a draw")
-        } else if cache[points[winner_index]] >= 0 {
-            let winner_player = winner_index + 1;
-            String::From("player ") + winner_player.to_string() + String::From(" is the winner")
-        }else {
-            String::From("No winners..")
-        }
     }
 }
 
@@ -191,6 +165,5 @@ impl HelperFunction {
 fn main() {
     let table = Table::start_game(4, "21");
 
-    Dealer::print_table_information(table);
-    println!("{}", Dealer::winner_of_21(table));
+    Dealer::print_table_information(&table);
 }
