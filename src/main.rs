@@ -147,18 +147,18 @@ struct HelperFunction {}
 
 impl HelperFunction {
     fn max_in_array_index (int_arr: &[u32]) -> u32 {
-        let mut maxIndex = 0;
-        let mut maxValue = int_arr[0];
+        let mut max_index = 0;
+        let mut max_value = int_arr[0];
 
         let mut i = 0;
         for int in int_arr.iter() {
             i += 1;
-            if int > &maxValue {
-                maxValue = int.clone();
-                maxIndex = i;
+            if int > &max_value {
+                max_value = int.clone();
+                max_index = i;
             }
         }
-        maxValue
+        max_value
     }
 }
 
