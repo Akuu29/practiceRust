@@ -68,17 +68,17 @@ impl Deck {
     }
 }
 
-struct Table {
+struct Table<'a> {
     players: Vec<Vec<Card>>,
-    game_mode: String,
+    game_mode: &'a str,
     deck: Deck
 }
 
-impl Table {
+impl Table<'_> {
     fn start_game(amount_of_players: u32, game_mode: &str) -> Table {
         let mut table = Table {
             players: vec![],
-            game_mode: game_mode.to_string(),
+            game_mode: game_mode,
             deck: Deck::generate_deck()
         };
 
@@ -89,7 +89,7 @@ impl Table {
             let mut player_card = vec![];
 
             let mut j = 0;
-            while j < Dealer::initial_cards(&table.game_mode) {
+            while j < Dealer::initial_cards(table.game_mode) {
                 player_card.push(table.deck.draw());
                 j += 1;
             }
@@ -104,12 +104,10 @@ impl Table {
 struct Dealer {}
 
 impl Dealer {
-    fn initial_cards(game_mode: &String) -> i32 {
-        let poker = String::from("poker");
-        let twenty_one = String::from("21");
+    fn initial_cards(game_mode: &str) -> i32 {
         match game_mode {
-            _poker => 5,
-            _21 => 2,
+            "poker" => 5,
+            "21" => 2,
             _ => 0
         }
     }
