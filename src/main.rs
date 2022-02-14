@@ -1,6 +1,7 @@
 extern crate rand;
 
 use rand::Rng;
+use std::collections::HashMap;
 
 #[derive(Clone, Debug)]
 struct Card {
@@ -139,29 +140,62 @@ impl Dealer {
         }
         value
     }
+
+    fn winner_of_21(table: &Table) -> () {
+        let mut points = vec![];
+        let mut hashmap = HashMap::new();
+
+        for player in table.players.iter() {
+            let point = Dealer::score_21_individual(player);
+            let result = hashmap.insert(point.clone(), 1);
+            match result {
+                None => None,
+                Some(value) => hashmap.insert(point.clone(), value + 1),
+            };
+
+            points.push(point);
+        }
+
+        println!("{:?}", &points);
+
+        let winner_index = HelperFunction::max_in_array_index(&points);
+
+        let number_of_winner = hashmap[&points[winner_index as usize]];
+        
+        if number_of_winner > 1 {
+            println!("It is a draw");
+        } else if number_of_winner >= 0 {
+            let winner_player = winner_index.clone() + 1;
+            println!("player {} is the winner", winner_player);
+        }else {
+            println!("No winners..");
+        }
+    }
 }
 
 struct HelperFunction {}
 
 impl HelperFunction {
-    fn max_in_array_index (int_arr: &[u32]) -> u32 {
+    fn max_in_array_index (int_arr: &Vec<u32>) -> u32 {
         let mut max_index = 0;
         let mut max_value = int_arr[0];
 
         let mut i = 0;
         for int in int_arr.iter() {
-            i += 1;
             if int > &max_value {
                 max_value = int.clone();
                 max_index = i;
             }
+            i += 1;
         }
-        max_value
+        max_index
     }
 }
 
 fn main() {
-    let table = Table::start_game(4, "21");
+    let game_mode = "21";
+    let table = Table::start_game(4, game_mode);
 
     Dealer::print_table_information(&table);
+    Dealer::winner_of_21(&table)
 }
