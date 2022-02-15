@@ -178,6 +178,13 @@ impl Dealer {
             println!("No winners..");
         }
     }
+
+    fn check_winner(table: &Table) {
+        match table.game_mode {
+            "21" => Dealer::winner_of_21(table),
+            _ => println!("no game"),
+        };
+    }
 }
 
 struct HelperFunction {}
@@ -204,5 +211,5 @@ fn main() {
     let table = Table::start_game(4, game_mode);
 
     Dealer::print_table_information(&table);
-    Dealer::winner_of_21(&table)
+    Dealer::check_winner(&table)
 }
