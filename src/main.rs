@@ -22,21 +22,19 @@ struct Deck {
 
 impl Deck {
     fn generate_deck() -> Deck {
-        let mut new_deck = vec![];
         let suits = ["♣", "♦", "♥", "♠"];
         let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+        // Vec::with_capacityで（suits個数 * values個数）分の空間を予約
+        let mut new_deck = Vec::with_capacity(suits.len() * values.len());
 
-        let mut int_value = 1;
         for suit in suits.iter() {
-            int_value = 1;
-            for value in values.iter() {
+            for (i, value) in values.iter().enumerate() {
                 let card = Card {
                     suit: suit.to_string(),
                     value: value.to_string(),
-                    int_value: int_value
+                    int_value: i as u32 + 1
                 };
                 new_deck.push(card);
-                int_value += 1;
             }
         }
 
