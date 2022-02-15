@@ -21,7 +21,7 @@ struct Deck {
 }
 
 impl Deck {
-    fn generate_deck() -> Deck {
+    fn generate_deck(game_mode: &str) -> Deck {
         let suits = ["♣", "♦", "♥", "♠"];
         let values = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
         // Vec::with_capacityで（suits個数 * values個数）分の空間を予約
@@ -29,10 +29,19 @@ impl Deck {
 
         for suit in suits.iter() {
             for (i, value) in values.iter().enumerate() {
+                let int_value_ = if game_mode == "21" {
+                    match value {
+                        &"A" | &"J" | &"Q" | &"K" => 10,
+                        _ => i as u32 + 1
+                    }
+                }else {
+                    i as u32 + 1
+                };
+
                 let card = Card {
                     suit: suit.to_string(),
                     value: value.to_string(),
-                    int_value: i as u32 + 1
+                    int_value: int_value_
                 };
                 new_deck.push(card);
             }
@@ -78,7 +87,7 @@ impl Table<'_> {
         let mut table = Table {
             players: vec![],
             game_mode: game_mode,
-            deck: Deck::generate_deck()
+            deck: Deck::generate_deck(game_mode)
         };
 
         table.deck.shuffle_deck();
