@@ -1,4 +1,4 @@
-extern crate rand;
+#![allow(dead_code)]
 
 use rand::Rng;
 use std::collections::HashMap;
@@ -167,7 +167,7 @@ impl Dealer {
 
         let winner_index = HelperFunction::max_in_array_index(&points);
 
-        let number_of_winner = hashmap[&points[winner_index as usize]];
+        let number_of_winner = hashmap[&points[winner_index]];
         
         if number_of_winner > 1 {
             println!("It is a draw");
@@ -190,17 +190,15 @@ impl Dealer {
 struct HelperFunction {}
 
 impl HelperFunction {
-    fn max_in_array_index (int_arr: &Vec<u32>) -> u32 {
+    fn max_in_array_index (int_arr: &Vec<u32>) -> usize {
         let mut max_index = 0;
         let mut max_value = int_arr[0];
 
-        let mut i = 0;
-        for int in int_arr.iter() {
+        for (i, int) in int_arr.iter().enumerate() {
             if int > &max_value {
                 max_value = int.clone();
                 max_index = i;
             }
-            i += 1;
         }
         max_index
     }
@@ -211,5 +209,5 @@ fn main() {
     let table = Table::start_game(4, game_mode);
 
     Dealer::print_table_information(&table);
-    Dealer::check_winner(&table)
+    Dealer::check_winner(&table);
 }
